@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<!--
+  ============================================================
+  US Crime Metrics — N328 Final Project
+  FILE: video.html
+  ============================================================
+  TO EMBED YOUR VIDEO:
+
+  Option A — YouTube (recommended):
+    1. Upload your video to YouTube (can be unlisted)
+    2. Click Share → Embed → copy the URL from the src="" attribute
+    3. Replace YOUR_VIDEO_ID below with your actual video ID
+       Example: https://www.youtube.com/embed/dQw4w9WgXcQ
+
+  Option B — Google Drive:
+    1. Upload your video file to Google Drive
+    2. Right-click → Share → set to "Anyone with the link"
+    3. Copy the file ID from the share URL
+    4. Use: https://drive.google.com/file/d/YOUR_FILE_ID/preview
+
+  Once you have your URL, find the <iframe> tag below,
+  uncomment it, and paste your URL into the src attribute.
+  Then delete the .video-placeholder div above it.
+  ============================================================
+-->
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Video · US Crime Metrics</title>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg:         #0d0d0f;
+      --surface2:   #1e1e24;
+      --border:     #2a2a35;
+      --accent:     #e63946;
+      --text:       #e8e8f0;
+      --text-dim:   #888898;
+      --text-muted: #555565;
+    }
+    [data-theme="light"] {
+      --bg:         #f4f4f6;
+      --surface2:   #ebebf0;
+      --border:     #d0d0da;
+      --accent:     #c1121f;
+      --text:       #1a1a2e;
+      --text-dim:   #555568;
+      --text-muted: #9090a8;
+    }
+    *, *::before, *::after { transition: background-color 0.3s ease, color 0.2s ease, border-color 0.2s ease; }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background: var(--bg); color: var(--text); font-family: 'DM Sans', sans-serif; min-height: 100vh; }
+
+    /* ── Header ── */
+    header {
+      padding: 20px 36px 16px;
+      border-bottom: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px;
+    }
+    .header-left h1 { font-family: 'Bebas Neue', sans-serif; font-size: 2rem; letter-spacing: 2px; line-height: 1; }
+    .header-left h1 span { color: var(--accent); }
+    .header-left p { font-size: 0.78rem; color: var(--text-dim); margin-top: 4px; font-weight: 300; }
+
+    /* ── Navigation ── */
+    nav { display: flex; border-bottom: 1px solid var(--border); padding: 0 36px; background: var(--bg); }
+    nav a {
+      display: block; padding: 11px 20px;
+      font-size: 0.85rem; font-weight: 500; color: var(--text-muted);
+      text-decoration: none; border-bottom: 3px solid transparent; margin-bottom: -1px;
+      transition: color 0.15s, border-color 0.15s;
+    }
+    nav a:hover { color: var(--text); }
+    nav a.active { color: var(--accent); border-bottom-color: var(--accent); }
+
+    /* ── Theme toggle ── */
+    .theme-toggle {
+      display: flex; align-items: center; gap: 7px;
+      background: var(--surface2); border: 1px solid var(--border); border-radius: 20px;
+      padding: 6px 14px; cursor: pointer; font-family: 'DM Sans', sans-serif;
+      font-size: 0.78rem; font-weight: 500; color: var(--text-dim); white-space: nowrap;
+    }
+    .theme-toggle:hover { border-color: var(--accent); color: var(--text); }
+
+    /* ── Page content ── */
+    .content {
+      max-width: 800px;
+      margin: 48px auto;
+      padding: 0 24px 80px;
+    }
+    .content h2 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 2.2rem;
+      letter-spacing: 1.5px;
+      color: var(--text);
+      margin-bottom: 6px;
+      line-height: 1;
+    }
+    .content h2 span { color: var(--accent); }
+    .byline { font-size: 0.78rem; color: var(--text-muted); margin-bottom: 28px; }
+    .content p { font-size: 0.88rem; color: var(--text-dim); line-height: 1.75; margin-bottom: 20px; }
+
+    /*
+      Video container uses the "padding-top trick" to maintain a 16:9
+      aspect ratio at any screen width.
+      padding-top: 56.25% = 9/16 × 100 = the height as a % of the width.
+      Reference: https://css-tricks.com/aspect-ratio-boxes/
+    */
+    .video-wrap {
+      position: relative;
+      width: 100%;
+      padding-top: 56.25%;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+      margin-bottom: 24px;
+    }
+    .video-wrap iframe {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      border: none;
+    }
+
+    /* Placeholder shown before real video is added — delete this block once embedded */
+    .video-placeholder {
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      color: var(--text-muted);
+      font-size: 0.85rem;
+      text-align: center;
+      padding: 20px;
+    }
+    .video-placeholder .icon { font-size: 3.5rem; opacity: 0.25; }
+    .video-placeholder .hint { font-size: 0.72rem; opacity: 0.6; max-width: 340px; line-height: 1.6; }
+
+    ::-webkit-scrollbar { width: 4px; }
+    ::-webkit-scrollbar-track { background: var(--bg); }
+    ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="header-left">
+    <h1>US <span>Crime</span> Metrics</h1>
+    <!-- Replace "Your Name Here" with your actual name -->
+    <p>FBI Supplementary Homicide Reports · 1980–2014 · 638,454 cases · <strong>Your Name Here</strong></p>
+  </div>
+  <button class="theme-toggle" onclick="toggleTheme()">
+    <span id="theme-icon">☀️</span>
+    <span id="theme-label">Light Mode</span>
+  </button>
+</header>
+
+<nav>
+  <a href="index.html">        Visualization</a>
+  <a href="documentation.html">Documentation</a>
+  <a href="video.html"         class="active">Video</a>
+</nav>
+
+<div class="content">
+  <h2>Video <span>Walkthrough</span></h2>
+  <p class="byline">A recorded overview of the visualization and design process</p>
+
+  <div class="video-wrap">
+
+    <!-- Google Drive video embed -->
+    <iframe src="https://drive.google.com/file/d/1_zh5f4sYz5gTI_RVj0hYjduL_8MEP321/preview" allowfullscreen></iframe>
+
+  </div>
+
+  <!--
+    Optional: add a short description of what your video covers.
+    You can delete this paragraph or replace it with your own text.
+  -->
+  <p>
+    This video walks through the design process, explains the dataset and key findings,
+    and demonstrates the interactive features of the visualization.
+  </p>
+
+</div>
+
+<script>
+/* Theme toggle — same logic as index.html so preference persists across pages */
+function toggleTheme() {
+  const html    = document.documentElement;
+  const isLight = html.getAttribute('data-theme') === 'light';
+  if (isLight) {
+    html.removeAttribute('data-theme');
+    document.getElementById('theme-icon').textContent  = '☀️';
+    document.getElementById('theme-label').textContent = 'Light Mode';
+    localStorage.setItem('theme','dark');
+  } else {
+    html.setAttribute('data-theme','light');
+    document.getElementById('theme-icon').textContent  = '🌙';
+    document.getElementById('theme-label').textContent = 'Dark Mode';
+    localStorage.setItem('theme','light');
+  }
+}
+/* Restore saved theme on page load */
+(function() {
+  if (localStorage.getItem('theme') === 'light') {
+    document.documentElement.setAttribute('data-theme','light');
+    document.getElementById('theme-icon').textContent  = '🌙';
+    document.getElementById('theme-label').textContent = 'Dark Mode';
+  }
+})();
+</script>
+</body>
+</html>
